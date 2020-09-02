@@ -2,7 +2,7 @@
 In order to use ephemeral containers, the K8S cluster needs to be created using the EphemeralContainers feature gate.
 
 ## Create a cluster enabling EphemeralContainers
-The following configuration helps installing a K8S cluster using ```kubeadm```.
+The following configuration ```cluster.yaml``` helps installing a K8S cluster using ```kubeadm```.
 ```
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: InitConfiguration
@@ -25,4 +25,12 @@ scheduler:
 controllerManager:
   extraArgs:
     "feature-gates": "EphemeralContainers=true"
+```
+Initialise the cluster. See https://github.com/xxradar/onprem-k8s-calico-oss for more info on prerequisites.
+```
+sudo kubeadm init --config cluster.yaml
+```
+## Create a nginx container
+```
+kubectl create deployment nginx --image nginx:latest
 ```
