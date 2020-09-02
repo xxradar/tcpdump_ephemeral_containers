@@ -1,4 +1,4 @@
-# How to tcpdump using ephemeral containers
+# How to tcpdump using ephemeral containers and ```kubectl debug```
 In order to use ephemeral containers, the K8S cluster needs to be created using the EphemeralContainers feature gate.
 
 ## Create a cluster enabling EphemeralContainers
@@ -30,7 +30,16 @@ Initialise the cluster. See https://github.com/xxradar/onprem-k8s-calico-oss for
 ```
 sudo kubeadm init --config cluster.yaml
 ```
-## Create a nginx container
+## Create a nginx pod
 ```
-kubectl create deployment nginx --image nginx:latest
+kubectl run nginx-demo --image nginx:latest 
+```
+## Create an ephemeral debug container
+```
+kubectl alpha debug -it nginx-demo  --image=dockersec/tcpdump --target nginx-demo
+```
+## Generate some traffic via a seperate console
+```
+kubectl run -it --rm load --image xxradar/hackon -- bash
+    curl http://<nginx-demo-ip-address>
 ```
